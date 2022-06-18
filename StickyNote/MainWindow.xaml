@@ -8,10 +8,12 @@
         Title="MainWindow" 
         Height="450" Width="450" 
         ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen" 
-        AllowDrop="True" WindowStyle="None" 
+        WindowStyle="None" 
         AllowsTransparency="True" BorderBrush="Black" 
-        BorderThickness="2">
+        BorderThickness="2" Background="{StaticResource Yellow}"
+        Topmost="True">
         <!--https://stackoverflow.com/a/36631416 for window transparency and border help-->
+
     <Grid>
 
         <Grid.ColumnDefinitions>
@@ -42,7 +44,8 @@
 
         <Button Width="30" Height="30" 
                 Grid.Column="1" Grid.Row="1"
-                FontSize="18" HorizontalAlignment="Left">
+                FontSize="18" HorizontalAlignment="Left"
+                Style="{StaticResource Button}">
             ⚙
         </Button>
 
@@ -50,7 +53,8 @@
                 Grid.Column="2"
                 Grid.Row="1"
                 FontSize="18"
-                HorizontalAlignment="Center">
+                HorizontalAlignment="Center"
+                Style="{StaticResource Button}">
             📍
         </Button>
 
@@ -60,21 +64,37 @@
                     >
             
             <Button Width="30" Height="30"
-                    FontSize="18" Margin="0,0,2,0">
+                    FontSize="18" Margin="0,0,2,0"
+                    Style="{StaticResource Button}">
                 ➖
             </Button>
             <Button Width="30" Height="30"
-                    FontSize="18" Padding="0">
+                    FontSize="18" Margin="0,0,2,0"
+                    Style="{StaticResource Button}">
+                ➕
+            </Button>
+            <Button Width="30" Height="30"
+                    FontSize="18" Padding="0"
+                    Style="{StaticResource ExitButton}">
                 ❌
             </Button>
             
         </StackPanel>
 
         <TextBox Grid.Column="1" Grid.ColumnSpan="2"
-                 Grid.Row="2" FontSize="24" />
+                 Grid.Row="2" FontSize="24"
+                 Style="{StaticResource TitleTextBox}">
+            Title
+        </TextBox>
 
         <RichTextBox Grid.Column="1" Grid.ColumnSpan="3"
-                     Grid.Row="3"/>
+                     Grid.Row="3" FontSize="14">
+            <FlowDocument>
+                <Paragraph>
+                    Lalala I'm pretty butterfly drifting in the wind 🦋
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
 
     </Grid>
 </Window>
