@@ -34,21 +34,13 @@ namespace StickyNote
 
         /// <summary>
         /// The position of the note.
-        /// <para>
-        /// If the value is <c>null</c> then set the position to <see cref="WindowStartupLocation.CenterScreen"/>
-        /// </para>
         /// </summary>
-        public Point? Position { get; set; } = null;
-        
+        public Point Position { get; set; }
+
         /// <summary>
         /// The title of the note.
         /// </summary>
         public string Title { get; set; }
-
-        /// <summary>
-        /// The content of the editor.
-        /// </summary>
-        public FlowDocument Content { get; set; }
 
         /// <summary>
         /// If the note is pinned.
@@ -59,6 +51,11 @@ namespace StickyNote
         /// The size of the note.
         /// </summary>
         public Point Size { get; set; } = new Point(450, 450);
+
+        /// <summary>
+        /// The index of the note.
+        /// </summary>
+        public int Index { get; set; }
 
     }
 }

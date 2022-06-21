@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,17 +34,12 @@ namespace StickyNote
             InitializeComponent();
         }
 
-        public StickyNoteWindow(bool deserialized) : this()
-        {
-            // TODO
-        }
-
         /// <summary>
         /// Pin the window.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PinButtonClick(object sender, RoutedEventArgs e)
+        public void PinButtonClick(object sender, RoutedEventArgs e)
         {
             Topmost = !Topmost;
 
@@ -77,7 +74,7 @@ namespace StickyNote
         /// <param name="e"></param>
         private void ExitButtonClick(object sender, RoutedEventArgs e)
         {
-            // Save(); TODO
+            Save();
             Close();
             // shutdown if shift held.
             if (Keyboard.IsKeyDown(Key.LeftShift))
@@ -117,6 +114,52 @@ namespace StickyNote
             // only move with left mouse
             if (e.LeftButton == MouseButtonState.Pressed && e.RightButton == MouseButtonState.Released)
                 DragMove();
+        }
+
+        private void InsertImage(object sender, RoutedEventArgs e)
+        {
+            // TODO
+        }
+
+        private void PrintNote(object sender, RoutedEventArgs e)
+        {
+            PrintDialog pd = new PrintDialog();
+            if (pd.ShowDialog() == true)
+            {
+                pd.PrintVisual(noteEditor, "Print Document");
+            }
+        }
+
+        public void Save(object sender, RoutedEventArgs e) => Save();
+
+        public void Save()
+        {
+            Data.Position = new Point(Left, Top);
+            Data.Pinned = Topmost;
+            Data.BackgroudColor = (SolidColorBrush)Background;
+            Data.FontFamily = noteEditor.FontFamily;
+            Data.FontSize = (float)noteEditor.FontSize;
+            Data.Size = new Point(Width, Height);
+            Data.Title = titleBox.Text;
+
+            string fileDir = App.SaveDir + $"{Data.Index}.stickynote";
+            if (!Directory.Exists(App.SaveDir))
+            {
+                Directory.CreateDirectory(App.SaveDir);
+            }
+
+            string json = JsonConvert.SerializeObject(Data, Formatting.Indented);
+            // save settings
+            File.WriteAllText(fileDir, json);
+            // save note.
+
+            TextRange range;
+            FileStream stream;
+            range = new TextRange(noteEditor.Document.ContentStart, noteEditor.Document.ContentEnd);
+            stream = new FileStream(fileDir + "_content", FileMode.Create);
+            range.Save(stream, DataFormats.XamlPackage);
+            stream.Close();
+
         }
 
     }
