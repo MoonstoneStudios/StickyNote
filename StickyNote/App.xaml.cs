@@ -28,6 +28,14 @@ namespace StickyNote
             }
         }
 
+        /// <summary>
+        /// A list of all the sticky notes.
+        /// </summary>
+        public List<StickyNoteWindow> StickyNotes { get; set; } = new List<StickyNoteWindow>();
+
+        /// <summary>
+        /// If the app has started yet.
+        /// </summary>
         private bool started = false;
 
         public App()
@@ -40,11 +48,27 @@ namespace StickyNote
             }
         }
 
+        /// <summary>
+        /// Save all notes.
+        /// </summary>
+        public void SaveAll()
+        {
+            foreach (var note in StickyNotes)
+            {
+                note.Save();
+            }
+        }
+
+        /// <summary>
+        /// Load the sticky notes from a file.
+        /// </summary>
         private void Load()
         {
             if (!Directory.Exists(SaveDir))
             {
-                new StickyNoteWindow().Show();
+                var window = new StickyNoteWindow();
+                window.Show();
+                StickyNotes.Add(window);
                 return;
             }
 
@@ -53,7 +77,9 @@ namespace StickyNote
 
             if (files.Length == 0)
             {
-                new StickyNoteWindow().Show();
+                var window = new StickyNoteWindow();
+                window.Show();
+                StickyNotes.Add(window);
                 return;
             }
 
@@ -92,10 +118,13 @@ namespace StickyNote
                 stream.Close();
 
                 window.Show();
+                StickyNotes.Add(window);
 
             }
 
         }
+
+        
 
     }
 }

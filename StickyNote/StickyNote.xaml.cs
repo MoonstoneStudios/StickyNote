@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -74,11 +75,30 @@ namespace StickyNote
         /// <param name="e"></param>
         private void ExitButtonClick(object sender, RoutedEventArgs e)
         {
-            Save();
-            Close();
             // shutdown if shift held.
-            if (Keyboard.IsKeyDown(Key.LeftShift))
+            if (Keyboard.IsKeyDown(Key.LeftShift) && !Keyboard.IsKeyDown(Key.LeftCtrl))
+            {
+                App app = (App)Application.Current;
+                app.SaveAll();
                 Application.Current.Shutdown();
+            }
+            // shutdown without saving if control and shift pressed
+            else if (Keyboard.IsKeyDown(Key.LeftShift) && Keyboard.IsKeyDown(Key.LeftCtrl))
+            {
+                Application.Current.Shutdown();
+            }
+            else
+            {
+                Close();
+                string file = App.SaveDir + $"{Data.Index}.stickynote";
+
+                if (File.Exists(file))
+                {
+                    File.Delete(file);
+                    File.Delete(file + "_content");
+                }
+
+            }
         }
 
         /// <summary>
@@ -91,6 +111,9 @@ namespace StickyNote
             StickyNoteWindow note = new StickyNoteWindow();
             note.Show();
 
+            App app = (App)Application.Current;
+            app.StickyNotes.Add(note);
+
             Point thisNote = PointToScreen(new Point(Left, Top));
 
             Point newNote = new Point(thisNote.X + 50, thisNote.Y + 50);
@@ -101,6 +124,7 @@ namespace StickyNote
             note.Top = newNote.Y;
 
             note.Data.Position = newNote;
+            note.Data.Index = app.StickyNotes.Count;
 
         }
 
@@ -116,11 +140,28 @@ namespace StickyNote
                 DragMove();
         }
 
+        /// <summary>
+        /// Insert an image.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void InsertImage(object sender, RoutedEventArgs e)
         {
-            // TODO
+            OpenFileDialog d = new OpenFileDialog();
+            d.Filter = "Image Files (*.png;*.jpg;*.jpeg;*.bmp;*.gif)|*.png;*.jpg;*.jpeg;*.bmp;*.gif";
+            if (d.ShowDialog() == true)
+            {
+                // https://stackoverflow.com/a/1963567
+                Clipboard.SetImage(new BitmapImage(new Uri(d.FileName)));
+                noteEditor.Paste();
+            }
         }
 
+        /// <summary>
+        /// Print (might remove)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PrintNote(object sender, RoutedEventArgs e)
         {
             PrintDialog pd = new PrintDialog();
@@ -130,8 +171,16 @@ namespace StickyNote
             }
         }
 
+        /// <summary>
+        /// Save the note
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void Save(object sender, RoutedEventArgs e) => Save();
 
+        /// <summary>
+        /// Save the note
+        /// </summary>
         public void Save()
         {
             Data.Position = new Point(Left, Top);
@@ -162,5 +211,12 @@ namespace StickyNote
 
         }
 
+        private void SaveAndCloseClick(object sender, RoutedEventArgs e)
+        {
+            Save();
+            Close();
+        }
     }
+
+
 }
