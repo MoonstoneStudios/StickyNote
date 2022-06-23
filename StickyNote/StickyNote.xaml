@@ -11,50 +11,66 @@
         ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen" 
         WindowStyle="None" 
         AllowsTransparency="True" BorderBrush="Black" 
-        BorderThickness="2" Background="{StaticResource Yellow}"
+        BorderThickness="2" Background="Transparent"
         Topmost="True"
         MouseDown="MoveWhenDragged"
         MinHeight="200"
-        MinWidth="200">
+        MinWidth="200"
+        >
         <!--https://stackoverflow.com/a/36631416 for window transparency and border help-->
 
+    <Window.ContextMenu>
+        <ContextMenu>
+
+            <MenuItem Click="ToggleTranslucency" 
+                      Header="Toggle Translucency" IsCheckable="True" />
+
+        </ContextMenu>
+    </Window.ContextMenu>
+
     <Grid>
-        <Grid.ColumnDefinitions>
-            <!--Border-->
-            <ColumnDefinition Width="5" />
-            <!--Settings and Text Boxes-->
-            <ColumnDefinition Width="*" />
-            <!--Pin Button-->
-            <ColumnDefinition Width="Auto" />
-            <!--Window Options-->
-            <ColumnDefinition Width="*" />
-            <!--Border-->
-            <ColumnDefinition Width="5" />
-        </Grid.ColumnDefinitions>
+        <!--https://stackoverflow.com/a/5248773-->
+        <Border Background="{StaticResource Yellow}"
+                x:Name="bgBorder" />
 
-        <Grid.RowDefinitions>
-            <!--Border-->
-            <RowDefinition Height="5" />
-            <!--Tools-->
-            <RowDefinition Height="auto" />
-            <!--Title Box-->
-            <RowDefinition Height="auto" />
-            <!--Text Editor-->
-            <RowDefinition Height="*" />
-            <!--Border-->
-            <RowDefinition Height="5" />
-        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <!--Border-->
+                <ColumnDefinition Width="5" />
+                <!--Settings and Text Boxes-->
+                <ColumnDefinition Width="*" />
+                <!--Pin Button-->
+                <ColumnDefinition Width="Auto" />
+                <!--Window Options-->
+                <ColumnDefinition Width="*" />
+                <!--Border-->
+                <ColumnDefinition Width="5" />
+            </Grid.ColumnDefinitions>
 
-        <Button Width="30" Height="30"
+            <Grid.RowDefinitions>
+                <!--Border-->
+                <RowDefinition Height="5" />
+                <!--Tools-->
+                <RowDefinition Height="auto" />
+                <!--Title Box-->
+                <RowDefinition Height="auto" />
+                <!--Text Editor-->
+                <RowDefinition Height="*" />
+                <!--Border-->
+                <RowDefinition Height="5" />
+            </Grid.RowDefinitions>
+
+            <Button Width="30" Height="30"
                 MinHeight="20" MinWidth="20"
                 Grid.Column="1" Grid.Row="1"
                 FontSize="18" HorizontalAlignment="Left"
                 Style="{StaticResource Button}"
-                ToolTip="Open this note's settings.">
-            <Image emoji:Image.Source="⚙" />
-        </Button>
+                ToolTip="Open this note's settings."
+                Click="OpenSettings">
+                <Image emoji:Image.Source="⚙" />
+            </Button>
 
-        <Button Width="30" Height="30"
+            <Button Width="30" Height="30"
                 Grid.Column="2"
                 Grid.Row="1"
                 FontSize="18"
@@ -63,77 +79,77 @@
                 Click="PinButtonClick"
                 x:Name="pinButton"
                 ToolTip="Pin or unpin this note.">
-            <Image emoji:Image.Source="📍" x:Name="pinEmojiImage" />
-        </Button>
+                <Image emoji:Image.Source="📍" x:Name="pinEmojiImage" />
+            </Button>
 
-        <StackPanel Orientation="Horizontal" 
+            <StackPanel Orientation="Horizontal" 
                     Grid.Column="3" Grid.Row="1" 
                     HorizontalAlignment="Right">
-            
-            <Button Width="30" Height="30"
+
+                <Button Width="30" Height="30"
                     FontSize="18" Margin="0,0,2,0"
                     Style="{StaticResource Button}"
-                    Click="Button_Click">
+                    Click="SaveAndCloseClick">
 
-                <Button.ToolTip>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock>
-                            Hide this note. 
-                        </TextBlock>
-                        <TextBlock>
+                    <Button.ToolTip>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock>
+                            Hide this note.
+                            </TextBlock>
+                            <TextBlock>
                             This note will close and save. See the ❌ button to close 
                             without saving.
-                        </TextBlock>
-                    </StackPanel>
-                </Button.ToolTip>
-                
-                ➖
-            </Button>
-            
-            <Button Width="30" Height="30"
+                            </TextBlock>
+                        </StackPanel>
+                    </Button.ToolTip>
+
+                    ➖
+                </Button>
+
+                <Button Width="30" Height="30"
                     FontSize="18" Margin="0,0,2,0"
                     Style="{StaticResource Button}"
                     Click="NewNoteButtonClick" 
                     ToolTip="Click to add a new note.">
-                ➕
-            </Button>
-            
-            <Button Width="30" Height="30"
+                    ➕
+                </Button>
+
+                <Button Width="30" Height="30"
                     FontSize="18" Padding="0"
                     Style="{StaticResource ExitButton}"
                     Click="ExitButtonClick">
 
-                <Button.ToolTip>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock>
+                    <Button.ToolTip>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock>
                             Click to close this note WITHOUT saving.
-                        </TextBlock>
-                        <TextBlock>
+                            </TextBlock>
+                            <TextBlock>
                              Hold shift and click to close all notes and save.
-                        </TextBlock>
-                        <TextBlock>
+                            </TextBlock>
+                            <TextBlock>
                              Hold shift and control to close ALL NOTES WITHOUT saving.
-                        </TextBlock>
-                        <TextBlock>
+                            </TextBlock>
+                            <TextBlock>
                             To close this note and save, see the ➖ button.
-                        </TextBlock>
-                    </StackPanel>
-                </Button.ToolTip>
-                
-                ❌
-            </Button>
-            
-        </StackPanel>
+                            </TextBlock>
+                        </StackPanel>
+                    </Button.ToolTip>
 
-        <emoji:TextBox Grid.Column="1" Grid.ColumnSpan="2"
+                    ❌
+                </Button>
+
+            </StackPanel>
+
+            <emoji:TextBox Grid.Column="1" Grid.ColumnSpan="2"
                     Grid.Row="2" FontSize="24"
                     Style="{StaticResource TitleTextBox}"
                     TabIndex="0"
                     x:Name="titleBox">
-            Title
-        </emoji:TextBox>
+                Title
+            </emoji:TextBox>
 
-        <emoji:RichTextBox Grid.Column="1" Grid.ColumnSpan="3"
+            <emoji:RichTextBox Grid.Column="1" Grid.ColumnSpan="3"
                     Grid.Row="3" FontSize="14"
                     AcceptsReturn="True"
                     AcceptsTab="True" UndoLimit="1024" 
@@ -141,76 +157,79 @@
                     x:Name="noteEditor" HorizontalScrollBarVisibility="Auto"
                     VerticalScrollBarVisibility="Auto"
                     >
-            
-            <!--Default Text-->
-            <FlowDocument>
-                <Paragraph>
-                    Lalala I'm pretty butterfly drifting in the wind 🦋
-                </Paragraph>
-            </FlowDocument>
 
-            <emoji:RichTextBox.ContextMenu>
-                <ContextMenu>
-                    <!--https://stackoverflow.com/a/20420727-->
-                    <MenuItem Command="ApplicationCommands.Cut"/>
-                    <MenuItem Command="ApplicationCommands.Copy"/>
-                    <MenuItem Command="ApplicationCommands.Paste"/>
-                    <MenuItem Command="ApplicationCommands.Undo"/>
-                    <MenuItem Command="ApplicationCommands.Redo"/>
-                    <MenuItem Click="Save" Header="Save"
+                <!--Default Text-->
+                <FlowDocument>
+                    <Paragraph>
+                        Lalala I'm pretty butterfly drifting in the wind 🦋
+                    </Paragraph>
+                </FlowDocument>
+
+                <emoji:RichTextBox.ContextMenu>
+                    <ContextMenu>
+                        <!--https://stackoverflow.com/a/20420727-->
+                        <MenuItem Command="ApplicationCommands.Cut"/>
+                        <MenuItem Command="ApplicationCommands.Copy"/>
+                        <MenuItem Command="ApplicationCommands.Paste"/>
+                        <MenuItem Command="ApplicationCommands.Undo"/>
+                        <MenuItem Command="ApplicationCommands.Redo"/>
+                        <MenuItem Click="Save" Header="Save"
                               InputGestureText="Ctrl+S"/>
-                    <Separator/>
-                    <MenuItem Command="EditingCommands.ToggleBold"
+                        <Separator/>
+                        <MenuItem Command="EditingCommands.ToggleBold"
                               Header="Toggle Bold"/>
-                    <MenuItem Command="EditingCommands.ToggleItalic"
+                        <MenuItem Command="EditingCommands.ToggleItalic"
                               Header="Toggle Italics"/>
-                    <MenuItem Command="EditingCommands.ToggleUnderline"
+                        <MenuItem Command="EditingCommands.ToggleUnderline"
                               Header="Toggle Underline"
                               />
-                    <Separator/>
-                    <MenuItem Command="EditingCommands.ToggleBullets" 
+                        <Separator/>
+                        <MenuItem Command="EditingCommands.ToggleBullets" 
                               InputGestureText="Ctrl+Shift+L" 
                               Header="Toggle Bullet List"
                               />
 
-                    <MenuItem Command="EditingCommands.ToggleNumbering" 
+                        <MenuItem Command="EditingCommands.ToggleNumbering" 
                               InputGestureText="Ctrl+Shift+N" 
                               Header="Toggle Numbered List"
                               />
-                    <Separator/>
-                    <MenuItem Command="EditingCommands.AlignCenter" 
+                        <Separator/>
+                        <MenuItem Command="EditingCommands.AlignCenter" 
                               InputGestureText="Alt+X" 
                               Header="Align Center"
                               />
-                    <MenuItem Command="EditingCommands.AlignLeft" 
+                        <MenuItem Command="EditingCommands.AlignLeft" 
                               InputGestureText="Alt+Z" 
                               Header="Align Left"
                               />
-                    <MenuItem Command="EditingCommands.AlignRight" 
+                        <MenuItem Command="EditingCommands.AlignRight" 
                               InputGestureText="Alt+C" 
                               Header="Align Right"
                               />
-                    <Separator/>
-                    <MenuItem Command="EditingCommands.IncreaseIndentation"
+                        <Separator/>
+                        <MenuItem Command="EditingCommands.IncreaseIndentation"
                               InputGestureText="Alt+S"
                               Header="Increase Indentation"/>
-                    <MenuItem Command="EditingCommands.DecreaseIndentation"
+                        <MenuItem Command="EditingCommands.DecreaseIndentation"
                               InputGestureText="Alt+D"
                               Header="Decrease Indentation"/>
-                    <Separator/>
-                    <MenuItem Click="PrintNote"
+                        <Separator/>
+                        <MenuItem Click="PrintNote"
                               InputGestureText="Ctrl+P" 
                               Header="Print"
                               />
-                    <MenuItem Click="InsertImage" 
+                        <MenuItem Click="InsertImage" 
                               InputGestureText="Ctrl+Shift+I" 
                               Header="InsertImage"
                               />
 
-                </ContextMenu>
-            </emoji:RichTextBox.ContextMenu>
-            
-        </emoji:RichTextBox>
+                    </ContextMenu>
+                </emoji:RichTextBox.ContextMenu>
 
+            </emoji:RichTextBox>
+
+        </Grid>
     </Grid>
+    
+    
 </Window>

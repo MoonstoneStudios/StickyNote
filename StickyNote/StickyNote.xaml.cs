@@ -50,7 +50,6 @@ namespace StickyNote
             {
                 // change the image inside the pin.
                 EImage.SetSource((DependencyObject)b.Content, "📍");
-                b.Effect = null;
             }
             else
             {
@@ -124,7 +123,7 @@ namespace StickyNote
             note.Top = newNote.Y;
 
             note.Data.Position = newNote;
-            note.Data.Index = app.StickyNotes.Count;
+            note.Data.Index = app.StickyNotes.Count - 1;
 
         }
 
@@ -185,7 +184,7 @@ namespace StickyNote
         {
             Data.Position = new Point(Left, Top);
             Data.Pinned = Topmost;
-            Data.BackgroudColor = (SolidColorBrush)Background;
+            Data.BackgroudColor = (SolidColorBrush)bgBorder.Background;
             Data.FontFamily = noteEditor.FontFamily;
             Data.FontSize = (float)noteEditor.FontSize;
             Data.Size = new Point(Width, Height);
@@ -216,6 +215,46 @@ namespace StickyNote
             Save();
             Close();
         }
+
+        private void OpenSettings(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow settings = new SettingsWindow();
+            settings.Title = $"Settings - {titleBox.Text}";
+            settings.ShowDialog();
+        }
+
+        /// <summary>
+        /// Make the note translunecnt
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void ToggleTranslucency(object sender, RoutedEventArgs e)
+        {
+            Data.Translucent = !Data.Translucent;
+
+            if (sender != null && sender is MenuItem menu)
+            {
+                menu.IsChecked = Data.Translucent;
+            }
+
+            if (Data.Translucent)
+            {
+                SolidColorBrush b = new SolidColorBrush();
+                SolidColorBrush bg = (SolidColorBrush)bgBorder.Background;
+                b.Color = Color.FromArgb(Data.TranslucencyAlpha, bg.Color.R, bg.Color.G, bg.Color.B);
+                bgBorder.Background = b;
+                bgBorder.Effect = new BlurEffect();
+            }
+            else
+            {
+                SolidColorBrush b = new SolidColorBrush();
+                SolidColorBrush bg = (SolidColorBrush)bgBorder.Background;
+                b.Color = Color.FromArgb(255, bg.Color.R, bg.Color.G, bg.Color.B);
+                bgBorder.Background = b;
+                bgBorder.Effect = null;
+            }
+        }
+
     }
 
 

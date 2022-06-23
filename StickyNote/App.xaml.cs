@@ -110,6 +110,8 @@ namespace StickyNote
 
                 window.titleBox.Text = data.Title;
 
+                window.bgBorder.Background = data.BackgroudColor;
+
                 TextRange range;
                 FileStream stream;
                 range = new TextRange(window.noteEditor.Document.ContentStart, window.noteEditor.Document.ContentEnd);

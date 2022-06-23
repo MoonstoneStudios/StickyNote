@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 
 namespace StickyNote
 {
@@ -56,6 +57,31 @@ namespace StickyNote
         /// The index of the note.
         /// </summary>
         public int Index { get; set; }
+
+        /// <summary>
+        /// If the note is translucent.
+        /// </summary>
+        public bool Translucent { get; set; }
+
+        /// <summary>
+        /// The alpha for translucency.
+        /// </summary>
+        public byte TranslucencyAlpha = 150;
+
+        /// <summary>
+        /// The blur radius for the translucency effect.
+        /// </summary>
+        public float TranslucencyBlurRadius { get; set; } = 5;
+
+        /// <summary>
+        /// The rendering bias for the translucency.
+        /// </summary>
+        public RenderingBias TranslucencyBias { get; set; } = RenderingBias.Quality;
+
+        /// <summary>
+        /// The font color.
+        /// </summary>
+        public Color FontColor { get; set; } = Color.FromRgb(0, 0, 0);
 
     }
 }
